@@ -1,6 +1,9 @@
 package com.finalproject.finalproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -121,5 +124,19 @@ public class RestAPIController {
             parserThreadsExecutor.scheduleAtFixedRate(thread, 0, 1, TimeUnit.MINUTES);
             parseItemThreads.add(thread);
         }
+    }
+
+    @GetMapping("/allParsed")
+    public ResponseEntity<ArrayList<ProductModel>> getAllParsed() {
+
+        ArrayList<ProductModel> productsData = new ArrayList<ProductModel>();
+
+        productRepository.findAll().forEach(productsData::add);
+
+        if (productsData.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(productsData, HttpStatus.OK);
     }
 }

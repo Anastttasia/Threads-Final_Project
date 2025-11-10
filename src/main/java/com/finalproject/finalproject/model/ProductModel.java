@@ -7,13 +7,13 @@ import jakarta.persistence.*;
 public class ProductModel {
 
     @Id
-    @Column(name = "productUrl")
+    @Column(name = "product_url")
     private String url;
 
-    @Column(name = "productPrice")
+    @Column(name = "product_description")
     private String price;
 
-    @Column(name = "productDescription")
+    @Column(name = "product_price")
     private String description;
 
     public ProductModel() {
