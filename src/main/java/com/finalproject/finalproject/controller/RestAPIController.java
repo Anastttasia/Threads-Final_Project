@@ -23,15 +23,14 @@ import com.finalproject.finalproject.repository.ProductRepository;
 
 class ParseItemThread extends Thread {
 
-    @Autowired
-    ProductRepository productRepository;
-
+    private ProductRepository productRepository;
     private String url;
     private String html;
 
-    ParseItemThread(String itemUrl, String html) {
+    ParseItemThread(ProductRepository productRepository, String itemUrl, String html) {
         super();
 
+        this.productRepository = productRepository;
         this.url = itemUrl;
         this.html = html;
     }
@@ -76,6 +75,9 @@ class ParseItemThread extends Thread {
 @RestController
 public class RestAPIController {
 
+    @Autowired
+    ProductRepository productRepository;
+
     ScheduledExecutorService parserThreadsExecutor;
 
     @PostMapping("/parse")
@@ -115,7 +117,7 @@ public class RestAPIController {
                 continue;
             }
 
-            ParseItemThread thread = new ParseItemThread(url, html);
+            ParseItemThread thread = new ParseItemThread(productRepository, url, html);
             parserThreadsExecutor.scheduleAtFixedRate(thread, 0, 1, TimeUnit.MINUTES);
             parseItemThreads.add(thread);
         }
